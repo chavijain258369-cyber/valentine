@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Be My Valentine 💘</title>
+
+  <style>
+    body {
+      background-color: #ffd6e8;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 80px 20px;
+      color: #8b004f;
+      overflow: hidden;
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 25px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 10px;
+      transition: transform 0.2s;
+      position: relative;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    #yes {
+      background-color: #ff4d88;
+      color: white;
+    }
+
+    #no {
+      background-color: #ddd;
+      color: #444;
+    }
+
+    .teddy {
+      margin: 20px 0 30px 0;
+    }
+
+    /* Floating Hearts */
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 24px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.7;
+      pointer-events: none;
+      user-select: none;
+      z-index: 10;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+
+    /* Photo slideshow */
+    .photo-frame {
+      margin-top: 20px;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      animation: fade 3s ease-in-out;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="card">
+    <h1>Hey my love 💖</h1>
+    <p>
+      I’ve been thinking about how lucky I am to have you.<br>
+      Every moment with you makes my days brighter.
+    </p>
+
+    <h1 id="question">Will you be my Valentine?</h1>
+
+    <!-- White Teddy Bear SVG -->
+    <div class="teddy">
+      <svg width="160" height="160" viewBox="0 0 200 200" aria-label="White teddy bear">
+        <circle cx="60" cy="50" r="25" fill="#ffffff"/>
+        <circle cx="140" cy="50" r="25" fill="#ffffff"/>
+        <circle cx="100" cy="90" r="50" fill="#ffffff"/>
+        <circle cx="80" cy="80" r="6" fill="#555"/>
+        <circle cx="120" cy="80" r="6" fill="#555"/>
+        <ellipse cx="100" cy="105" rx="10" ry="7" fill="#ffb6c1"/>
+        <circle cx="100" cy="150" r="35" fill="#ffffff"/>
+        <circle cx="75" cy="160" r="12" fill="#ffffff"/>
+        <circle cx="125" cy="160" r="12" fill="#ffffff"/>
+      </svg>
+    </div>
+
+    <button id="yes" onclick="yesClicked()">Yes 💕</button>
+    <button id="no" onclick="noClicked()">No 🙈</button>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="music" src="darkhaast.mp3"></audio>
+
+  <script>
+    let noCount = 0;
+
+    const noMessages = [
+      "Are you sure? 🥺",
+      "You're breaking my heart 💔",
+      "Think again… I made this just for you 😭",
+      "Come on… we’d be the cutest Valentines 💞"
+    ];
+
+    function yesClicked() {
+      const card = document.getElementById("card");
+
+      card.innerHTML = `
+        <h1>YAY!!! 💖💖💖</h1>
+        <p style="font-size:1.3rem;">
+          Thank you for saying yes, Samyy 💕<br>
+          I’ll never make you sad….!!
+        </p>
+
+        <div class="photo-frame">
+          <img id="slideshow" src="photo1.jpg" alt="Our Memory" />
+        </div>
+
+        <h2>Forever yours 🧸💗</h2>
+      `;
+
+      startMusic();
+      startHearts();
+      startSlideshow();
+    }
+
+    function noClicked() {
+      const question = document.getElementById("question");
+      const noBtn = document.getElementById("no");
+      const yesBtn = document.getElementById("yes");
+
+      if (noCount < noMessages.length) {
+        question.innerText = noMessages[noCount];
+        noCount++;
+
+        yesBtn.style.transform = `scale(${1 + noCount * 0.2})`;
+        noBtn.style.transform = `scale(${1 - noCount * 0.1})`;
+        return;
+      }
+
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      question.innerText = "Okay okay… you’re not clicking that 😅💘";
+    }
+
+    /* Music starts from the special line */
+    function startMusic() {
+      const music = document.getElementById("music");
+      music.currentTime = 93; // time in seconds where "tu meri baahon me duniya bhulade" starts
+      music.volume = 0.7;
+      music.play();
+    }
+
+    /* Floating hearts animation */
+    function startHearts() {
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerText = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 20 + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+      }, 300);
+    }
+
+    /* Photo slideshow logic */
+    const photos = ["photo1.jpg", "photo2.jpg"];
+    let currentPhoto = 0;
+
+    function startSlideshow() {
+      const img = document.getElementById("slideshow");
+
+      setInterval(() => {
+        currentPhoto = (currentPhoto + 1) % photos.length;
+        img.src = photos[currentPhoto];
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
